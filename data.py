@@ -1,8 +1,6 @@
 from random import shuffle
 
 import pandas as pd
-import geopandas as gpd
-import matplotlib.pyplot as plt
 import requests
 import os
 
@@ -47,9 +45,13 @@ def read_data(ids):
     dfs = []
     for track_id in ids:
         csv_file = f'envirocar_tracks_csv/{track_id}.csv'
-        df = pd.read_csv(csv_file)
+        df = pd.read_csv(csv_file,delimiter='; ')
         dfs.append(df)
-    final_df = pd.concat(dfs, ignore_index=True)
+    final_df = pd.concat(dfs, ignore_index=True, sort=False)
+    final_df = final_df.loc[:, ~final_df.columns.duplicated()]
+    final_df = final_df.drop_duplicates()
+    final_df = final_df.reindex(sorted(final_df.columns), axis=1)
+    final_df = final_df.fillna(final_df.mean()) # TODO: or fill with median after analysis
     return final_df
 
 def get_columns(df):
