@@ -1,0 +1,2 @@
+id; CO2(kg/h); Intake Pressure(kPa); Intake Temperature(c); Consumption(l/h); Speed(km/h); Rpm(u/min); Calculated MAF(g/s); longitude; latitude; time
+51dfefa1e4b0feb05dbedfc1; 3.37931408172372E-4; 30.0; 72.0; 1.4380059922228597E-4; 0.0; 746.0; 1.57906; 7.60652; 51.972; 2013-07-12T12:01:29Z

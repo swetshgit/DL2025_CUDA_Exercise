@@ -1,0 +1,23 @@
+name: cs7643-fp
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - matplotlib
+  - tqdm
+#  - envirocar-py
+  - pip:
+    - torch
+    - torchtext
+    - notebook
+    - numpy
+    - spacy
+    - pandas==1.5.3
+    - requests
+    - geopandas
+    - pydeck
+    - ipython
+    - folium
+    - envirocar-py
+    - pyogrio
+

@@ -1,0 +1,2 @@
+id; CO2(kg/h); GPS Altitude(m); GPS HDOP(precision); GPS PDOP(precision); GPS Accuracy(%); MAF(l/s); Consumption(l/h); Speed(km/h); GPS Speed(km/h); GPS VDOP(precision); longitude; latitude; time
+567aa2aae4b000f94d91c832; 1.6763183714967613; 105.69999694824219; 0.8; 1.1; 10.0; 2.1700000762939453; 0.7133269665943665; 0.0; 1.8; 0.7; 7.64496269; 51.96664957; 2015-12-23T12:51:34Z
