@@ -45,7 +45,7 @@ def read_data(ids):
     dfs = []
     for track_id in ids:
         csv_file = f'envirocar_tracks_csv/{track_id}.csv'
-        df = pd.read_csv(csv_file,delimiter='; ')
+        df = pd.read_csv(csv_file,delimiter=';')
         dfs.append(df)
     final_df = pd.concat(dfs, ignore_index=True, sort=False)
     final_df = final_df.loc[:, ~final_df.columns.duplicated()]
