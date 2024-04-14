@@ -59,3 +59,41 @@
 #     # else:
 #     #     ts = pd.read_csv('ts.csv')
 #     #     return ts
+
+
+
+# final_df = pd.concat(dfs, ignore_index=True, sort=False)
+#     final_df = final_df.loc[:, ~final_df.columns.duplicated()]
+#     final_df = final_df.drop_duplicates()
+#     final_df = final_df.reindex(sorted(final_df.columns), axis=1)
+
+
+# def read_data(ids):
+#     dfs = []
+#     track_df = global_track_df_object
+#     excluded_columns = ['id','time','track.begin','track.end']
+#     sequences = []
+#     for track_id in ids:
+#         track_data = track_df[track_df['track.id'] == track_id]
+#         track_data = track_data.drop(columns=excluded_columns, errors='ignore')
+#         csv_file = f'envirocar_tracks_csv/{track_id}.csv'
+#         df = pd.read_csv(csv_file,delimiter=';')
+#         df.fillna(df.mean(numeric_only=True), inplace=True)
+#         print("type", type(df), df.shape)
+#         zeroth = track_data.iloc[0]
+#         mean_v = track_data.median(numeric_only=True)
+#         # print("zeroth", zeroth)
+#         # print("mean_v",mean_v)
+#         zeroth.fillna(mean_v, inplace=True)
+#         track_sequences = []
+#         for row in df.itertuples():
+#             print("type row", row)
+#             break
+#             updated_row = pd.concat([row,zeroth])
+#             print("updated", type(updated_row),get_columns(updated_row))
+#             break
+#             track_sequences.append(updated_row)
+#         track_final_df = pd.concat(track_sequences)
+#         print("shapess: track_final_df",type(track_final_df),track_final_df.shape)
+#         sequences.append(track_final_df)
+#     return sequences
