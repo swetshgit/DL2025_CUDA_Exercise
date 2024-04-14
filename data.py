@@ -75,7 +75,7 @@ def create_sequences(data, target=target_value, features=feature_list, sequence_
             X.append(data[features].iloc[i-sequence_length:i].values)
             y.append(data[target].iloc[i])
             #print("y", data[target].iloc[i])
-    return torch.tensor(X, dtype=torch.float64), torch.tensor(y, dtype=torch.float64)
+    return torch.tensor(X, dtype=torch.float32), torch.tensor(y, dtype=torch.float32)
 
 def read_data(ids):
     track_df = global_track_df_object
