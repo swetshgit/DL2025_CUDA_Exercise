@@ -24,7 +24,7 @@ feature_list = [
     'Rpm(u/min)',
     'Throttle Position(%)',
     'Intake Temperature(c)',
-    'Engine Load(%)',
+    'Engine Load(%)'
 ]
 
 required_columns = [

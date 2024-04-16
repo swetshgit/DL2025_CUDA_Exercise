@@ -1,4 +1,4 @@
-
+from constants import feature_list, target_value
 from data.init import divide_track_ids, download_data, get_columns, read_data, set_trackdf
 from models.GRU.model import GRUModel
 
