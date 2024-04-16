@@ -20,7 +20,7 @@ class GRU(nn.Module):
         return out
 
 class GRUModel():
-    def __init__(self, input_size, hidden_size=64, num_layers=2, lr=0.01):
+    def __init__(self, input_size, hidden_size=64, num_layers=2, lr=0.001):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
         self.model = GRU(input_size, hidden_size, num_layers,self.device).to(self.device)

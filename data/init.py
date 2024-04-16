@@ -106,8 +106,19 @@ def read_data(ids):
         # break;
     print("shapes", len(X), len(y), X[0].shape, y[0].shape)
     single_df = pd.concat(big_df)
+    big_X = torch.cat(X)
+    big_y = torch.cat(y)
+    min_vals_X = big_X.min(dim=0, keepdim=True)[0].min(dim=1, keepdim=True)[0]
+    max_vals_X = big_X.max(dim=0, keepdim=True)[0].max(dim=1, keepdim=True)[0]
+
+    min_vals_y = big_y.min(dim=0, keepdim=True)[0]
+    max_vals_y = big_y.max(dim=0, keepdim=True)[0]
+
+    # Perform min-max normalization per feature
+    normalized_X = (big_X - min_vals_X) / (max_vals_X - min_vals_X)
+    normalized_y = (big_y - min_vals_y) / (max_vals_y - min_vals_y)
     #print("single_df", single_df.describe())
-    return torch.cat(X),torch.cat(y), single_df
+    return normalized_X, normalized_y, single_df
 
 def get_columns(df):
     columns = []
