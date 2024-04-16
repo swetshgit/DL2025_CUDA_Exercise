@@ -84,11 +84,15 @@ def read_data(ids):
     X = []
     y = []
     total_count = 0
+    big_df = []
     for track_id in ids:
         csv_file = f'{output_dir}/{track_id}.csv'
         df = pd.read_csv(csv_file,delimiter=';')
         df['time'] = pd.to_datetime(df['time'])
+        df[target_value].fillna(method='ffill', inplace=True)
         df.fillna(df.mean(numeric_only=True), inplace=True)
+        big_df.append(df)
+        #print("df.decribe", df.describe())
         #print("type", type(df))
         total_count += len(df)
         seq_x, seq_y = create_sequences(df)
@@ -101,7 +105,9 @@ def read_data(ids):
         #     print(f'content: {content}', sep='\n')
         # break;
     print("shapes", len(X), len(y), X[0].shape, y[0].shape)
-    return torch.cat(X),torch.cat(y)
+    single_df = pd.concat(big_df)
+    #print("single_df", single_df.describe())
+    return torch.cat(X),torch.cat(y), single_df
 
 def get_columns(df):
     columns = []

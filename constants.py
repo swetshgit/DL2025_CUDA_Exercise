@@ -16,7 +16,6 @@
 # ]
 target_value = 'CO2(kg/h)'
 feature_list = [
-    'CO2(kg/h)',
     'GPS Bearing(deg)',
     'GPS HDOP(precision)',
     'GPS Altitude(m)',
