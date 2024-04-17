@@ -19,12 +19,11 @@ feature_list = [
     'GPS Bearing(deg)',
     'GPS HDOP(precision)',
     'GPS Altitude(m)',
-    'Consumption(l/h)',
     'Speed(km/h)',
     'Rpm(u/min)',
     'Throttle Position(%)',
     'Intake Temperature(c)',
-    'Engine Load(%)',
+    'Engine Load(%)'
 ]
 
 required_columns = [
