@@ -1,0 +1,19 @@
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+import re
+
+#Data Preprocessing
+def preprocess_data(df):
+    # Convert strings to floats and strip units/commas
+    for column in df.columns:
+        
+        #Convert string representations of numbers into floats
+        
+        df[column] = df[column].apply(lambda x: re.sub(r'[^\d.-]', '', x) if isinstance(x, str) else x)
+        df[column] = pd.to_numeric(df[column], errors='coerce')
+
+    # Apply Min-Max Normalization
+    scaler = MinMaxScaler()
+    df[df.columns] = scaler.fit_transform(df[df.columns])
+    return df, scaler  
