@@ -9,7 +9,10 @@ from io import StringIO
 import torch
 from envirocar import TrackAPI, DownloadClient, BboxSelector, ECConfig
 
-from constants import all_columns_present_id_list, feature_list, output_dir, required_columns, target_value
+from constants import all_columns_present_id_list, delimiter_value, download_output_dir, feature_list, \
+    original_delimiter, output_dir, \
+    required_columns, \
+    target_value
 
 # create an initial but optional config and an api client
 config = ECConfig()
@@ -38,14 +41,14 @@ def download_data():
         if response.status_code == 200:
             # Save the CSV file to the output directory
             content = StringIO(response.content.decode('utf-8'))
-            reader = csv.reader(content, delimiter=';')
+            reader = csv.reader(content, delimiter=original_delimiter)
             cleaned_rows = [[item.strip() for item in row] for row in reader]
             #print("cleaned_rows",cleaned_rows[0])
-            output_file = os.path.join(output_dir, f'{track_id}.csv')
+            output_file = os.path.join(download_output_dir, f'{track_id}.csv')
             with open(output_file, 'w', newline='') as f:
-                writer = csv.writer(f, delimiter=';')
+                writer = csv.writer(f, delimiter=original_delimiter)
                 writer.writerows(cleaned_rows)
-            df = pd.read_csv(output_file, delimiter=';')
+            df = pd.read_csv(output_file, delimiter=original_delimiter)
             if check_columns(df, required_columns):
                 ids_list.append(track_id)
             else:
@@ -65,7 +68,21 @@ def divide_track_ids():
     test_ids = unique_ids[train:]
     return train_ids, test_ids
 
-def create_sequences(data, target=target_value, features=feature_list, sequence_length=20):
+def divide_sequences(X, Y):
+    n = X.shape[0]
+    indices = torch.randperm(n)
+    shuffled_X = X[indices]
+    shuffled_Y = Y[indices]
+    split = int(0.75 * n)
+    train_X = shuffled_X[:split]
+    train_Y = shuffled_Y[:split]
+
+    test_X = shuffled_X[split:]
+    test_Y = shuffled_Y[split:]
+
+    return (train_X, train_Y), (test_X, test_Y)
+
+def create_sequences(data, target=target_value, features=feature_list, sequence_length=10):
     X, y = [], []
     total = len(data)
     #print("columns", data.columns)
@@ -77,7 +94,9 @@ def create_sequences(data, target=target_value, features=feature_list, sequence_
             #print("y", data[target].iloc[i])
     return torch.tensor(X, dtype=torch.float32), torch.tensor(y, dtype=torch.float32)
 
-def read_data(ids):
+def simple_hash_for_fuel_type(fuelType):
+    return hash(fuelType) % 10
+def read_data(ids, normalised = False):
     track_df = global_track_df_object
     excluded_columns = ['id', 'time', 'track.begin', 'track.end']
     track_df = track_df.drop(columns=excluded_columns, errors='ignore')
@@ -87,12 +106,18 @@ def read_data(ids):
     big_df = []
     for track_id in ids:
         csv_file = f'{output_dir}/{track_id}.csv'
-        df = pd.read_csv(csv_file,delimiter=';')
+        df = pd.read_csv(csv_file,delimiter=delimiter_value)
         df['time'] = pd.to_datetime(df['time'])
-        df[target_value].fillna(method='ffill', inplace=True)
-        df.fillna(df.mean(numeric_only=True), inplace=True)
+        tr = track_df[track_df['track.id'] == track_id]
+        df['engineDisplacement'] =tr['sensor.engineDisplacement']
+        df['fuelTypeString'] = tr['sensor.fuelType']
+        df['fuelType'] = df['fuelTypeString'].apply(lambda x: simple_hash_for_fuel_type(x))
+        # df[target_value].fillna(method='ffill', inplace=True)
+        df['engineDisplacement'].fillna(method='ffill', inplace=True)
+        # df.fillna(df.mean(numeric_only=True), inplace=True)
         big_df.append(df)
         #print("df.decribe", df.describe())
+        #break;
         #print("type", type(df))
         total_count += len(df)
         seq_x, seq_y = create_sequences(df)
@@ -107,18 +132,20 @@ def read_data(ids):
     print("shapes", len(X), len(y), X[0].shape, y[0].shape)
     single_df = pd.concat(big_df)
     big_X = torch.cat(X)
-    big_y = torch.cat(y)
-    min_vals_X = big_X.min(dim=0, keepdim=True)[0].min(dim=1, keepdim=True)[0]
-    max_vals_X = big_X.max(dim=0, keepdim=True)[0].max(dim=1, keepdim=True)[0]
+    big_y = torch.cat(y).unsqueeze(1)
 
-    min_vals_y = big_y.min(dim=0, keepdim=True)[0]
-    max_vals_y = big_y.max(dim=0, keepdim=True)[0]
+    if (not normalised):
+        return big_X, big_y, single_df
+    else:
+        min_vals_X = big_X.min(dim=0, keepdim=True)[0].min(dim=1, keepdim=True)[0]
+        max_vals_X = big_X.max(dim=0, keepdim=True)[0].max(dim=1, keepdim=True)[0]
 
-    # Perform min-max normalization per feature
-    normalized_X = (big_X - min_vals_X) / (max_vals_X - min_vals_X)
-    normalized_y = (big_y - min_vals_y) / (max_vals_y - min_vals_y)
-    #print("single_df", single_df.describe())
-    return normalized_X, normalized_y, single_df
+        min_vals_y = big_y.min(dim=0, keepdim=True)[0]
+        max_vals_y = big_y.max(dim=0, keepdim=True)[0]
+        normalized_X = (big_X - min_vals_X) / (max_vals_X - min_vals_X)
+        normalized_y = (big_y - min_vals_y) / (max_vals_y - min_vals_y)
+        #print("single_df", single_df.describe())
+        return normalized_X, normalized_y, single_df
 
 def get_columns(df):
     columns = []
@@ -131,7 +158,16 @@ def get_columns(df):
 def check_columns(df, required_columns):
     return set(required_columns).issubset(df.columns)
 
-
+def download_track_df():
+    bbox = BboxSelector([ # It defines a bbox for the area of Münster (Germany)
+        7.58,  # min_x
+        51.94,  # min_y
+        7.64,  # max_x
+        51.98  # max_y
+    ])
+    track_df = track_api.get_tracks(bbox=bbox, num_results=1000)
+    track_df.to_csv('track_df2.csv', index=False)
+    return track_df
 
 
 
