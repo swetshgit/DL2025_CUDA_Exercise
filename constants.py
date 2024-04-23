@@ -23,7 +23,9 @@ feature_list = [
     'Rpm(u/min)',
     'Throttle Position(%)',
     'Intake Temperature(c)',
-    'Engine Load(%)'
+    'Engine Load(%)',
+    'engineDisplacement',
+    'fuelType'
 ]
 
 required_columns = [
@@ -40,7 +42,16 @@ required_columns = [
     'Engine Load(%)',
     'time'
 ]
-output_dir = 'envirocar_tracks_csv'
+download_output_dir = 'envirocar_tracks_csv'
+original_delimiter = ';'
+
+output_dir = 'imputed_envirocar_data'
+delimiter_value = ','
+
+# output_dir = 'envirocar_tracks_csv'
+# delimiter_value = ';'
+
+loss_image_dir = "loss_images"
 
 all_columns_present_id_list = ['661245119828af15e2717fed', '6612450a9828af15e2717c76', '660b61e09828af15e232d0c3', '660b61da9828af15e232ce12', '65eeef0527de036499a72864', '65eeef0a27de036499a72b1b', '65ab9613769a4a5c859dbad6', '65ab9617769a4a5c859dbead', '65ab9626769a4a5c859dc49a', '65ab962a769a4a5c859dc820', '659fa485e4334e110cc91523', '65868308e4334e110cc30bc0', '6586830ce4334e110cc31030', '65868321e4334e110cc31e25', '65868325e4334e110cc32271', '657d6e21e4334e110c29a519', '657d6e27e4334e110c29a61d', '65716543e4334e110c24925a', '655efd4de4334e110cefdb1c', '655efd53e4334e110cefddca', '6520ed349186d0330638b754', '6520ed2f9186d0330638b4ac', '64fc075ade656f7b9eefe24f', '64fc075ade656f7b9eefe364',
                                '64fc0aebde656f7b9ef01ce2', '64b1008ac7e42807e7eabb2f', '64b10090c7e42807e7eabeb2', '649e5fc6c7e42807e751c2ff', '649e5fcac7e42807e751c64f', '64952e3cc7e42807e74b6939', '64952e41c7e42807e74b71d5', '648acd0ac7e42807e7038f32', '6482e20eca0a730aef0f3c67', '6481cd86ca0a730aefddb8f3', '64725ad0ca0a730aef50ed59', '646dc14dca0a730aef443b5f', '646dc174ca0a730aef445de9', '645f34ccca0a730aef36fad2', '645f34cfca0a730aef36fdb6', '644eb8cfca0a730aef197857', '644eb8d1ca0a730aef197b89', '642e5ebcca0a730aeffd3e7a', '642e5ebfca0a730aeffd4239', '642e5ec5ca0a730aeffd4672', '642e5ec8ca0a730aeffd46e3', '642e5ed7ca0a730aeffd53f5', '642e5edaca0a730aeffd54f6', '6412b1f05244bc763ca7d46d',

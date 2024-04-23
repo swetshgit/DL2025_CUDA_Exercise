@@ -1,4 +1,8 @@
 import matplotlib.pyplot as plt
+
+from constants import loss_image_dir
+
+
 def plot_loss(train_losses, val_losses, model_name ="GRU"):
     plt.figure(figsize=(10, 5))
     plt.plot(train_losses, label='Training loss')
@@ -8,5 +12,5 @@ def plot_loss(train_losses, val_losses, model_name ="GRU"):
     plt.ylabel('Loss')
     plt.legend()
     plt.grid(True)
-    plt.savefig(model_name + "_loss.png")
+    plt.savefig(loss_image_dir +"/" +model_name + "_loss.png")
     #plt.show()
