@@ -73,14 +73,21 @@ def divide_sequences(X, Y):
     indices = torch.randperm(n)
     shuffled_X = X[indices]
     shuffled_Y = Y[indices]
-    split = int(0.75 * n)
-    train_X = shuffled_X[:split]
-    train_Y = shuffled_Y[:split]
 
-    test_X = shuffled_X[split:]
-    test_Y = shuffled_Y[split:]
+    train_split = int(0.7 * n)
+    validate_split = int(0.15 * n)
+    text_split = n - train_split - validate_split
 
-    return (train_X, train_Y), (test_X, test_Y)
+    train_X = shuffled_X[:train_split]
+    train_Y = shuffled_Y[:train_split]
+
+    validate_X = shuffled_X[train_split: train_split + validate_split]
+    validate_Y = shuffled_Y[train_split: train_split + validate_split]
+
+    test_X = shuffled_X[train_split + validate_split:]
+    test_Y = shuffled_Y[train_split + validate_split:]
+
+    return (train_X, train_Y), (test_X, test_Y), (validate_X, validate_Y)
 
 def create_sequences(data, target=target_value, features=feature_list, sequence_length=10):
     X, y = [], []
