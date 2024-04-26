@@ -16,4 +16,5 @@
 
 
 
-1. batch_size=1024, num_layers=20, hidden_size=128, iteration_name=it_name,cnn=True,cnn_ol=15, lr=0.0001, reg=1e-6, epochs=30 : final accuracy::::: (0.3791725852272727, 0.05146533641082554) : exp1
+1. batch_size=1024, 2 layer cnn, num_layers=20, hidden_size=128, iteration_name=it_name,cnn=True,cnn_ol=15, lr=0.0001, reg=1e-6, epochs=30 : final accuracy::::: (0.3791725852272727, 0.05146533641082554) : exp1
+2. batch_size=1024, num_layers=20, hidden_size=128, iteration_name=it_name,cnn=True,cnn_ol=15, lr=0.0001, reg=1e-6, epochs=30: 5 fold, dropout 0.1::  final accuracy::::: (0.46448863636363635, 0.047341078985978) : exp2
