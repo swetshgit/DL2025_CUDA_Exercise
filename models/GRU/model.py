@@ -19,12 +19,12 @@ class CNN_GRU(nn.Module):
                 nn.BatchNorm1d(cnn_out_channels),
                 nn.ReLU(),
                 nn.MaxPool1d(kernel_size=2, stride=1),
-                nn.Conv1d(cnn_out_channels, cnn_out_channels, kernel_size=3, padding=1),
-                nn.BatchNorm1d(cnn_out_channels),
-                nn.ReLU(),
-                nn.MaxPool1d(kernel_size=2, stride=2)
+                # nn.Conv1d(cnn_out_channels, cnn_out_channels, kernel_size=3, padding=1),
+                # nn.BatchNorm1d(cnn_out_channels),
+                # nn.ReLU(),
+                # nn.MaxPool1d(kernel_size=2, stride=2)
         )
-        self.gru = nn.GRU(cnn_out_channels, hidden_size, num_layers, batch_first=True)
+        self.gru = nn.GRU(cnn_out_channels, hidden_size, num_layers, batch_first=True,dropout=0.2)
         self.linear = nn.Linear(hidden_size, 1)
 
     def forward(self, x):
@@ -87,11 +87,12 @@ class GRUModel():
             #print("self.device", self.device)
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
-            #print("device:", inputs.device, labels.device)
+            print("device:", inputs.device, labels.device)
             outputs = self.model(inputs)
             loss = self.criterion(outputs, labels)
             loss.backward()
-            #print(f'Ind {ind + 1}, Loss: {loss.item()}')
+            torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
+            print(f'Ind {ind + 1}, Loss: {loss.item()}')
             self.optimizer.step()
             ind += 1
             train_loss += loss.item() #* inputs.size(0)
@@ -114,7 +115,7 @@ class GRUModel():
         val_loss /= len(dataloader.dataset)
         self.val_losses.append(val_loss)
 
-    def test(self, dataloader, tolerance =0.1):
+    def test(self, dataloader, tolerance =0.2):
         self.model.eval()
         total_mse = 0
         total = 0
@@ -142,7 +143,7 @@ class GRUModel():
         print("trainloss", self.train_losses)
         print("val loss", self.val_losses)
         plot_loss(self.train_losses,self.val_losses,self.name)
-        plot_acc(self.train_accuracy, self.val_accuracy, self.name)
+        #plot_acc(self.train_accuracy, self.val_accuracy, self.name)
 
     def run_model(self, train, test, valid):
         (train_x,train_y) = train
@@ -156,8 +157,9 @@ class GRUModel():
         for epoch in range(self.epochs):
             self.train(train_dataloader, epoch)
             self.validate(valid_dataloader, epoch)
-            self.train_accuracy.append(self.test(train_dataloader)[0])
-            self.val_accuracy.append(self.test(valid_dataloader)[0])
+            # self.train_accuracy.append(self.test(train_dataloader)[0])
+            # self.val_accuracy.append(self.test(valid_dataloader)[0])
+            # print("accuracy::", self.train_accuracy[-1], self.val_accuracy[-1])
         self.final_accuracy = self.test(test_dataloader)
         print("final accuracy:::::", self.final_accuracy)
         self.plot_analysis()

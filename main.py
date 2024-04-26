@@ -5,6 +5,7 @@ from data.init import divide_sequences, divide_track_ids, download_data, downloa
     set_trackdf
 from models.GRU.model import GRUModel
 
+original = False
 
 if __name__ == '__main__':
     print("started")
@@ -13,7 +14,8 @@ if __name__ == '__main__':
     if(len(sys.argv) > 1):
         it_name = sys.argv[1]
     print("it", it_name)
-    X, Y, sdf = read_data(all_columns_present_id_list, True)
+
+    X, Y, sdf = read_data(all_columns_present_id_list, True, original)
     print("singleDF", sdf.describe())
     train_seq, test_seq, valid_seq = divide_sequences(X, Y)
     feature_len = train_seq[0].shape[2]
@@ -24,6 +26,6 @@ if __name__ == '__main__':
     # test_x, test_y,_ = read_data(test_ids)
     print("shape train::", train_seq[0].shape, train_seq[1].shape)
     print("shape test::", test_seq[0].shape, test_seq[1].shape)
-    gru_model = GRUModel(feature_len, batch_size=256, num_layers=10, hidden_size=128, iteration_name=it_name,cnn=True,cnn_ol=50, lr=0.000001, reg=1e-5, epochs=30)
+    gru_model = GRUModel(feature_len, batch_size=128, num_layers=20, hidden_size=128, iteration_name=it_name,cnn=True,cnn_ol=20, lr=0.00001, reg=1e-5, epochs=10)
     gru_model.run_model(train_seq, test_seq, valid_seq)
     #download_track_df()

@@ -1,3 +1,19 @@
 1. 128 batch, 3 layers in GRU, cnn out 20, l2 reg: 0.0001
 2. hidden 128
 3. GRU_normalised_total_128_layer_5_cnn30_l2_reg-5_0001_lr_newcl_hidden64_3l_cnn_split_fix_no_shuffle_loss.png
+
+
+
+
+
+1. original dataset
+2. sequence length
+    1. 10
+    2. 20
+3. tolerance
+    1. 0.1
+    2. 0.2
+
+
+
+1. batch_size=1024, num_layers=20, hidden_size=128, iteration_name=it_name,cnn=True,cnn_ol=15, lr=0.0001, reg=1e-6, epochs=30 : final accuracy::::: (0.3791725852272727, 0.05146533641082554) : exp1

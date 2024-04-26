@@ -21,11 +21,10 @@ feature_list = [
     'GPS Altitude(m)',
     'Speed(km/h)',
     'Rpm(u/min)',
+    'Consumption(l/h)',
     'Throttle Position(%)',
     'Intake Temperature(c)',
-    'Engine Load(%)',
-    'engineDisplacement',
-    'fuelType'
+    'Engine Load(%)'
 ]
 
 required_columns = [
@@ -45,7 +44,17 @@ required_columns = [
 download_output_dir = 'envirocar_tracks_csv'
 original_delimiter = ';'
 
+original_dataset_csv = 'original_dataset.csv'
+
+original_dataset_features = [
+'GPS_Speed_Ms','GPS_HDOP','GPS_Bearing','Gx','Gy','Gz','G_Calibrated','OBD_KPL_Average','OBD_Trip_KPL_Average','OBD_Intake_Air_Temp_C','Device_Barometer_M','GPS_Altitude_M','OBD_Engine_Load','OBD_Fuel_Level','GPS_Accuracy_M','OBD_Speed_Km','GPS_Speed_Km','Device_Trip_Dist_Km','OBD_Engine_Coolant_Temp_C','OBD_Engine_RPM','OBD_Adapter_Voltage','OBD_KPL_Instant','OBD_Fuel_Flow_CCmin','Device_Fuel_Remaining','OBD_Ambient_Air_Temp_C','OBD_CO2_gkm_Average',
+    #'Device_Cost_Km_Inst',
+    'Device_Cost_Km_Trip','OBD_Air_Pedal','Context','Acceleration_kmhs','Reaction_Time','Air_Drag_Force','Speed_RPM_Relation','KPL_Instant'
+]
+original_dataset_target = 'OBD_CO2_gkm_Instant'
+
 output_dir = 'imputed_envirocar_data'
+output_dir_2 = 'neviro_car_2'
 delimiter_value = ','
 
 # output_dir = 'envirocar_tracks_csv'
