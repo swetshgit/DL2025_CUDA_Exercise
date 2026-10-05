@@ -181,7 +181,7 @@ def read_data(ids, normalised = False, original=False):
         # df['engineDisplacement'] =tr['sensor.engineDisplacement']
         # df['fuelTypeString'] = tr['sensor.fuelType']
         # df['fuelType'] = df['fuelTypeString'].apply(lambda x: simple_hash_for_fuel_type(x))
-        df[target_value].fillna(method='ffill', inplace=True)
+        df[target_value] = df[target_value].ffill()
         # df['engineDisplacement'].fillna(method='ffill', inplace=True)
         df.fillna(df.mean(numeric_only=True), inplace=True)
         big_df.append(df)

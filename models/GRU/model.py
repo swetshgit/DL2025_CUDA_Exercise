@@ -54,8 +54,14 @@ class GRU(nn.Module):
 
 class GRUModel():
     def __init__(self, input_size, hidden_size=64, num_layers=2, lr=0.0001, batch_size=64, iteration_name="", cnn=False,cnn_ol=64, reg=1e-5, epochs=20):
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
+        # Device priority: CUDA (NVIDIA GPU) > MPS (Apple Silicon) > CPU
+        if torch.cuda.is_available():
+            self.device = torch.device('cuda')
+        elif torch.backends.mps.is_available():
+            self.device = torch.device('mps')
+        else:
+            self.device = torch.device('cpu')
+        print(f'[GRUModel] Using device: {self.device}')
         if(cnn):
             self.model = CNN_GRU(input_size,cnn_ol, hidden_size, num_layers, self.device).to(self.device)
         else:
