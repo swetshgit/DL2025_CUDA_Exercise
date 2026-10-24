@@ -1,3 +1,0 @@
-id,CO2(kg/h),Intake Pressure(kPa),Consumption(l/h),Intake Temperature(c),Speed(km/h),Rpm(u/min),Calculated MAF(g/s),longitude,latitude,time
-51dff0a1e4b0feb05dbee010,3.432131246072726E-4,30.0,1.460481381307543E-4,71.0,0.0,749.0,1.60374,7.60665,51.9719,2013-07-12T12:06:14Z
-51dff0a1e4b0feb05dbee012,3.432131246072726E-4,30.0,1.460481381307543E-4,71.0,0.0,746.0,1.60374,7.60664,51.9718,2013-07-12T12:06:20Z

@@ -154,3 +154,20 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Keep local project artifacts out of the public repository. Each directory
+# retains a .gitkeep placeholder so its name remains visible on GitHub.
+data/*
+!data/.gitkeep
+envirocar_tracks_csv/*
+!envirocar_tracks_csv/.gitkeep
+Imputed Envirocar Track Data/*
+!Imputed Envirocar Track Data/.gitkeep
+imputed_envirocar_data/*
+!imputed_envirocar_data/.gitkeep
+loss_images/*
+!loss_images/.gitkeep
+results/*
+!results/.gitkeep
+utils/*
+!utils/.gitkeep
